@@ -7,6 +7,7 @@ permission:
   read: allow
   bash:
     "*": deny
+    "gh-issue-sync init": allow
     "gh-issue-sync pull*": allow
     "gh-issue-sync status*": allow
     "gh-issue-sync list*": allow
