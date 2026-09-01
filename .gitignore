@@ -1,3 +1,7 @@
 .env.*
 .issues/
 .vscode/
+
+.build/
+.swiftpm/
+.DS_Store
