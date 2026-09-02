@@ -42,3 +42,46 @@ import PokerKit
     #expect(a.hashValue == b.hashValue)
     #expect(Set([a, b]).count == 1)
 }
+
+private func allRankSuitCards() -> [Card] {
+    Rank.allCases.flatMap { rank in Suit.allCases.map { Card(rank: rank, suit: $0) } }
+}
+
+@Test func exhaustiveRankSuitCombinationsProduceExactlyFiftyTwoCards() {
+    #expect(allRankSuitCards().count == 52)
+}
+
+@Test func setOfAllRankSuitCombinationsContainsExactlyFiftyTwoUniqueCards() {
+    #expect(Set(allRankSuitCards()).count == 52)
+}
+
+@Test func everyRankSuitCombinationAppearsExactlyOnce() {
+    let all = allRankSuitCards()
+    for rank in Rank.allCases {
+        for suit in Suit.allCases {
+            #expect(all.filter { $0.rank == rank && $0.suit == suit }.count == 1)
+        }
+    }
+}
+
+@Test func everyRankAppearsWithAllFourSuitsAndEverySuitWithAllThirteenRanks() {
+    let all = allRankSuitCards()
+    for rank in Rank.allCases {
+        #expect(Set(all.filter { $0.rank == rank }.map(\.suit)) == Set(Suit.allCases))
+    }
+    for suit in Suit.allCases {
+        #expect(Set(all.filter { $0.suit == suit }.map(\.rank)) == Set(Rank.allCases))
+    }
+}
+
+@Test func constructingTheSameRankSuitTwiceYieldsEqualCards() {
+    for rank in Rank.allCases {
+        for suit in Suit.allCases {
+            let a = Card(rank: rank, suit: suit)
+            let b = Card(rank: rank, suit: suit)
+            #expect(a == b)
+            #expect(a.hashValue == b.hashValue)
+            #expect(Set([a, b]).count == 1)
+        }
+    }
+}
