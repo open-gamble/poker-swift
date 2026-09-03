@@ -149,3 +149,71 @@ private func allCardRankSuitCards() -> [Card] {
         }
     }
 }
+
+private func pokerRankOrdinal(_ rank: CardRank) -> Int {
+    let pokerOrder: [CardRank] = [
+        .two, .three, .four, .five, .six, .seven, .eight,
+        .nine, .ten, .jack, .queen, .king, .ace,
+    ]
+    return pokerOrder.firstIndex(of: rank)!
+}
+
+@Test func exhaustiveOrderedCardPairsResolvePerPokerRankOrder() {
+    let cards = allCardRankSuitCards()
+    var pairCount = 0
+    for a in cards {
+        for b in cards {
+            pairCount += 1
+            let aOrdinal = pokerRankOrdinal(a.rank)
+            let bOrdinal = pokerRankOrdinal(b.rank)
+            if aOrdinal < bOrdinal {
+                #expect(a < b)
+                #expect(b > a)
+                #expect(!(b < a))
+            } else if aOrdinal > bOrdinal {
+                #expect(b < a)
+                #expect(a > b)
+                #expect(!(a < b))
+            } else {
+                #expect(!(a < b))
+                #expect(!(b < a))
+            }
+        }
+    }
+    #expect(pairCount == 52 * 52)
+}
+
+@Test func everyOrderedCardPairComparesIdenticallyTwice() {
+    let cards = allCardRankSuitCards()
+    for a in cards {
+        for b in cards {
+            let first = (a < b, a > b)
+            let second = (a < b, a > b)
+            #expect(first == second)
+        }
+    }
+}
+
+@Test func antisymmetryHoldsForEveryOrderedCardPair() {
+    let cards = allCardRankSuitCards()
+    for a in cards {
+        for b in cards {
+            #expect((a < b) == (b > a))
+            #expect((a > b) == (b < a))
+            #expect(!((a < b) && (b < a)))
+        }
+    }
+}
+
+@Test func cardComparisonIsTransitiveAcrossAllCardTriples() {
+    let cards = allCardRankSuitCards()
+    for a in cards {
+        for b in cards {
+            let ab = a < b
+            guard ab else { continue }
+            for c in cards where b < c {
+                #expect(a < c)
+            }
+        }
+    }
+}
