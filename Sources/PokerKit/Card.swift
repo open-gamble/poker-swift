@@ -1,17 +1,17 @@
-public enum Rank: CaseIterable {
+public enum CardRank: CaseIterable {
     case two, three, four, five, six, seven, eight, nine, ten
     case jack, queen, king, ace
 }
 
-public enum Suit: CaseIterable {
+public enum CardSuit: CaseIterable {
     case clubs, diamonds, hearts, spades
 }
 
 public struct Card: Hashable {
-    public let rank: Rank
-    public let suit: Suit
+    public let rank: CardRank
+    public let suit: CardSuit
 
-    public init(rank: Rank, suit: Suit) {
+    public init(rank: CardRank, suit: CardSuit) {
         self.rank = rank
         self.suit = suit
     }
